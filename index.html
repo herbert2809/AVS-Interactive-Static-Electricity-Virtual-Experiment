@@ -1,421 +1,824 @@
-/* --- CSS Reset & Base Styles --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Static Electricity Lab</title>
+    <style>
+        /* --- CSS Reset & Base Styles --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8fafc; /* slate-50 */
-    color: #1e293b; /* slate-800 */
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-    -webkit-user-select: none;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #1e293b; /* slate-800 */
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            -webkit-user-select: none;
+        }
 
-/* --- Layout --- */
-header {
-    background-color: #2563eb; /* blue-600 */
-    color: white;
-    padding: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        /* --- Layout --- */
+        header {
+            background-color: #2563eb; /* blue-600 */
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-h1 {
-    font-size: 1.25rem;
-    font-weight: 700;
-}
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
 
-main {
-    flex: 1;
-    position: relative;
-    background: linear-gradient(to bottom, #eff6ff, #e2e8f0); /* blue-50 to slate-200 */
-    cursor: crosshair;
-    overflow: hidden;
-    touch-action: none; /* Prevent scroll on mobile */
-}
+        main {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(to bottom, #eff6ff, #e2e8f0); /* blue-50 to slate-200 */
+            cursor: crosshair;
+            overflow: hidden;
+            touch-action: none; /* Prevent scroll on mobile */
+        }
 
-/* --- Ruler --- */
-#ruler {
-    position: absolute;
-    top: 0;
-    width: 4rem; /* 16 */
-    height: 16rem; /* 64 */
-    background-color: #fcd34d; /* amber-300 */
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    transform-origin: top center;
-    transition: transform 0.075s linear;
-    border-left: 2px solid #fbbf24; /* amber-400 */
-    border-right: 2px solid #fbbf24;
-    border-bottom: 2px solid #fbbf24;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    padding-bottom: 1rem;
-    left: 50%;
-    pointer-events: none; /* Let clicks pass through to container */
-}
+        /* --- Ruler --- */
+        #ruler {
+            position: absolute;
+            top: 0;
+            width: 4rem; /* 16 */
+            height: 16rem; /* 64 */
+            background-color: #fcd34d; /* amber-300 */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform-origin: top center;
+            transition: transform 0.075s linear;
+            border-left: 2px solid #fbbf24; /* amber-400 */
+            border-right: 2px solid #fbbf24;
+            border-bottom: 2px solid #fbbf24;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 1rem;
+            left: 50%;
+            pointer-events: none; /* Let clicks pass through to container */
+        }
 
-.ruler-markings {
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 1rem;
-    padding-right: 0.25rem;
-}
+        .ruler-markings {
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            padding-right: 0.25rem;
+        }
 
-.mark {
-    width: 50%;
-    height: 2px;
-    background-color: #d97706; /* amber-600 */
-    align-self: flex-end;
-}
+        .mark {
+            width: 50%;
+            height: 2px;
+            background-color: #d97706; /* amber-600 */
+            align-self: flex-end;
+        }
 
-/* --- Cloth Animation --- */
-#cloth {
-    position: absolute;
-    width: 6rem;
-    height: 6rem;
-    background-color: #fef9c3; /* yellow-100 */
-    border-radius: 9999px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    border: 4px solid #fde047; /* yellow-200 */
-    z-index: 20;
-    left: 50%;
-    top: 10%;
-    /* transform handled in JS/Keyframes */
-    display: none; /* Hidden by default */
-    overflow: hidden;
-}
+        /* --- Cloth Animation --- */
+        #cloth {
+            position: absolute;
+            width: 6rem;
+            height: 6rem;
+            background-color: #fef9c3; /* yellow-100 */
+            border-radius: 9999px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 4px solid #fde047; /* yellow-200 */
+            z-index: 20;
+            left: 50%;
+            top: 10%;
+            /* transform handled in JS/Keyframes */
+            display: none; /* Hidden by default */
+            overflow: hidden;
+        }
 
-#cloth.active {
-    display: block;
-    animation: wipe 0.6s ease-in-out infinite;
-}
+        #cloth.active {
+            display: block;
+            animation: wipe 0.6s ease-in-out infinite;
+        }
 
-.cloth-texture {
-    width: 100%;
-    height: 100%;
-    opacity: 0.5;
-    background-image: radial-gradient(#fbbf24 2px, transparent 2.5px);
-    background-size: 10px 10px;
-}
+        .cloth-texture {
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            background-image: radial-gradient(#fbbf24 2px, transparent 2.5px);
+            background-size: 10px 10px;
+        }
 
-@keyframes wipe {
-    0% { top: 10%; transform: translateX(-50%) rotate(-5deg) scale(1); }
-    50% { top: 60%; transform: translateX(-50%) rotate(5deg) scale(0.95); }
-    100% { top: 10%; transform: translateX(-50%) rotate(-5deg) scale(1); }
-}
+        @keyframes wipe {
+            0% { top: 10%; transform: translateX(-50%) rotate(-5deg) scale(1); }
+            50% { top: 60%; transform: translateX(-50%) rotate(5deg) scale(0.95); }
+            100% { top: 10%; transform: translateX(-50%) rotate(-5deg) scale(1); }
+        }
 
-/* --- Sparks --- */
-#sparks {
-    position: absolute;
-    bottom: -0.5rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
+        /* --- Sparks --- */
+        #sparks {
+            position: absolute;
+            bottom: -0.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
 
-.spark-icon {
-    color: #facc15; /* yellow-400 */
-    font-size: 1.5rem;
-    font-weight: bold;
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
+        .spark-icon {
+            color: #facc15; /* yellow-400 */
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .5; }
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
 
-/* --- Paper Bits --- */
-.paper {
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    background-color: white;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    transition: transform 0.075s linear; /* Smooth rotation */
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-    opacity: 0.9;
-    will-change: top, left, transform;
-}
+        /* --- Paper Bits --- */
+        .paper {
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: transform 0.075s linear; /* Smooth rotation */
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+            opacity: 0.9;
+            will-change: top, left, transform;
+        }
 
-/* --- Control Panel --- */
-#controls {
-    background-color: white;
-    padding: 1rem;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-    z-index: 20;
-}
+        /* --- Control Panel --- */
+        #controls {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+        }
 
-.control-container {
-    max-width: 42rem;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
+        .control-container {
+            max-width: 42rem;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
 
-@media (min-width: 768px) {
-    .control-container {
-        flex-direction: row;
-        align-items: center;
-    }
-}
+        @media (min-width: 768px) {
+            .control-container {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
 
-/* Buttons */
-.btn-wipe {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    background: linear-gradient(to right, #facc15, #f97316); /* yellow-400 to orange-500 */
-    color: white;
-    font-weight: 700;
-    padding: 1rem 1.5rem;
-    border-radius: 0.75rem;
-    border: none;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.1s;
-    position: relative;
-    overflow: hidden;
-}
+        /* Buttons */
+        .btn-wipe {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: linear-gradient(to right, #facc15, #f97316); /* yellow-400 to orange-500 */
+            color: white;
+            font-weight: 700;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            border: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
 
-.btn-wipe:active {
-    transform: scale(0.95);
-}
+        .btn-wipe:active {
+            transform: scale(0.95);
+        }
 
-.btn-wipe:hover {
-    background: linear-gradient(to right, #eab308, #ea580c);
-}
+        .btn-wipe:hover {
+            background: linear-gradient(to right, #eab308, #ea580c);
+        }
 
-.icon-circle {
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 0.5rem;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .icon-circle {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* Meter */
-.meter-container {
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+        /* Meter */
+        .meter-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-.meter-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #475569;
-}
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #475569;
+        }
 
-.meter-bar-bg {
-    width: 100%;
-    height: 1rem;
-    background-color: #e2e8f0;
-    border-radius: 9999px;
-    overflow: hidden;
-    border: 1px solid #cbd5e1;
-}
+        .meter-bar-bg {
+            width: 100%;
+            height: 1rem;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+        }
 
-#meter-fill {
-    height: 100%;
-    width: 0%;
-    background-color: #60a5fa; /* blue-400 */
-    transition: width 0.2s ease-out, background-color 0.2s;
-}
+        #meter-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #60a5fa; /* blue-400 */
+            transition: width 0.2s ease-out, background-color 0.2s;
+        }
 
-.meter-text {
-    font-size: 0.75rem;
-    color: #64748b;
-    font-style: italic;
-}
+        .meter-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-style: italic;
+        }
 
-/* Reset Button */
-.btn-reset {
-    padding: 0.75rem;
-    color: #94a3b8;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    border-radius: 9999px;
-    transition: color 0.2s, background-color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        /* Reset Button */
+        .btn-reset {
+            padding: 0.75rem;
+            color: #94a3b8;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: color 0.2s, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.btn-reset:hover {
-    color: #ef4444;
-    background-color: #fef2f2;
-}
+        .btn-reset:hover {
+            color: #ef4444;
+            background-color: #fef2f2;
+        }
 
-/* --- Modal --- */
-#modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 50;
-    display: none; /* Hidden by default */
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    backdrop-filter: blur(4px);
-}
+        /* --- Modal --- */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 50;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
+        }
 
-#modal-overlay.open {
-    display: flex;
-    animation: fadeIn 0.2s ease-out;
-}
+        #modal-overlay.open {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
 
-.modal-content {
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    max-width: 32rem;
-    width: 100%;
-    overflow: hidden;
-    transform: scale(0.95);
-    animation: zoomIn 0.2s ease-out forwards;
-}
+        .modal-content {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 32rem;
+            width: 100%;
+            overflow: hidden;
+            transform: scale(0.95);
+            animation: zoomIn 0.2s ease-out forwards;
+        }
 
-.modal-header {
-    background-color: #2563eb;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-}
+        .modal-header {
+            background-color: #2563eb;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
 
-.modal-body {
-    padding: 1.5rem;
-    color: #334155;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .modal-body {
+            padding: 1.5rem;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-.info-box {
-    background-color: #fffbeb;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #fef3c7;
-}
+        .info-box {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #fef3c7;
+        }
 
-.btn-primary {
-    background-color: #2563eb;
-    color: white;
-    padding: 0.6rem 2rem;
-    border-radius: 0.75rem;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-    transition: transform 0.1s, background-color 0.1s;
-}
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+            transition: transform 0.1s, background-color 0.1s;
+        }
 
-.btn-primary:hover {
-    background-color: #1d4ed8;
-    transform: scale(1.02);
-}
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: scale(1.02);
+        }
 
-.guest-badge {
-    display: none;
-}
-@media (min-width: 768px) {
-    .guest-badge {
-        display: flex;
-        align-items: center;
-        padding: 0.25rem 0.75rem;
-        background-color: rgba(29, 78, 216, 0.5);
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        color: #dbeafe;
-        border: 1px solid rgba(59, 130, 246, 0.5);
-    }
-}
+        .guest-badge {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .guest-badge {
+                display: flex;
+                align-items: center;
+                padding: 0.25rem 0.75rem;
+                background-color: rgba(29, 78, 216, 0.5);
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                color: #dbeafe;
+                border: 1px solid rgba(59, 130, 246, 0.5);
+            }
+        }
 
-.btn-small {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    background-color: white;
-    color: #1d4ed8;
-    padding: 0.375rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.btn-small:hover {
-    background-color: #eff6ff;
-}
+        .btn-small {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background-color: white;
+            color: #1d4ed8;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-small:hover {
+            background-color: #eff6ff;
+        }
 
-/* --- Utility Classes --- */
-.hidden { display: none !important; }
-.text-center { text-align: center; }
-.mt-2 { margin-top: 0.5rem; }
-.text-sm { font-size: 0.875rem; }
-.text-xs { font-size: 0.75rem; }
-.text-slate-400 { color: #94a3b8; }
+        /* --- Utility Classes --- */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 0.5rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-slate-400 { color: #94a3b8; }
 
-/* --- Animations --- */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { transform: scale(0.95); } to { transform: scale(1); } }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.spin { animation: spin 1s linear infinite; }
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.95); } to { transform: scale(1); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .spin { animation: spin 1s linear infinite; }
 
-/* --- Icons (SVG sizing) --- */
-svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-}
-.icon-lg { width: 1.5rem; height: 1.5rem; }
-.icon-yellow { color: #fde047; }
+        /* --- Icons (SVG sizing) --- */
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .icon-lg { width: 1.5rem; height: 1.5rem; }
+        .icon-yellow { color: #fde047; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <svg class="icon-yellow icon-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <h1>Static Electricity Lab</h1>
+        </div>
+        <div class="header-right">
+            <div class="guest-badge">Guest Access Active</div>
+            <button class="btn-small" id="btn-why">
+                <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Why?
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Experiment Area -->
+    <main id="experiment-area">
+        <div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); color: #94a3b8; font-size: 0.875rem; pointer-events: none;">
+            Move mouse/finger to control ruler
+        </div>
+
+        <!-- Ruler -->
+        <div id="ruler">
+            <div class="ruler-markings">
+                <!-- Markings generated by JS -->
+            </div>
+            
+            <!-- Cloth Animation -->
+            <div id="cloth">
+                <div class="cloth-texture"></div>
+                <div style="position: absolute; inset: 0; background-color: #ffedd5; opacity: 0.3; border-radius: 9999px; transform: scale(0.9);"></div>
+            </div>
+
+            <!-- Sparks -->
+            <div id="sparks">
+                <span class="spark-icon">⚡</span>
+            </div>
+        </div>
+
+        <!-- Papers container -->
+        <div id="papers-layer"></div>
+    </main>
+
+    <!-- Control Panel -->
+    <div id="controls">
+        <div class="control-container">
+            <!-- Wipe Button -->
+            <div style="flex: 1; width: 100%;">
+                <button id="btn-rub" class="btn-wipe">
+                    <div class="icon-circle">
+                        <svg id="icon-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
+                    </div>
+                    <span style="font-size: 1.125rem; letter-spacing: 0.025em; text-transform: uppercase;">Wipe Cloth</span>
+                </button>
+                <p class="text-center text-xs text-slate-400 mt-2">Click/Tap to build up static charge</p>
+            </div>
+
+            <!-- Meter -->
+            <div class="meter-container">
+                <div class="meter-header">
+                    <span>Electric Charge</span>
+                    <span id="charge-text">0%</span>
+                </div>
+                <div class="meter-bar-bg">
+                    <div id="meter-fill"></div>
+                </div>
+                <p id="charge-desc" class="meter-text">Neutral</p>
+            </div>
+
+            <!-- Reset -->
+            <div>
+                <button id="btn-reset" class="btn-reset" title="Reset Experiment">
+                    <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explanation Modal -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="font-size: 1.125rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    How it works
+                </h2>
+                <button id="btn-close-modal" style="background: none; border: none; color: white; cursor: pointer;">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h3 style="color: #2563eb; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Experiment</h3>
+                    <p style="font-size: 0.875rem; line-height: 1.6;">
+                        1. Click <strong>"Wipe Cloth"</strong> repeatedly to charge the ruler.<br/>
+                        2. Move the ruler over the paper bits.<br/>
+                        3. Watch them jump!
+                    </p>
+                </div>
+                
+                <div class="info-box">
+                    <h3 style="color: #b45309; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Science</h3>
+                    <p style="font-size: 0.875rem; line-height: 1.6;">
+                        <strong>Friction</strong> transfers electrons between the cloth and the ruler, creating an <span style="color: #d97706; font-weight: 700;">electric charge</span>.
+                    </p>
+                    <p style="font-size: 0.875rem; margin-top: 0.5rem;">
+                        This charge creates an invisible field that attracts neutral objects like paper. If the force is stronger than gravity, the paper lifts up!
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid #f1f5f9;">
+                    <button id="btn-start" class="btn-primary">Start Experiment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration & Constants ---
+        const CONSTANTS = {
+            GRAVITY: 0.5,
+            ATTRACTION_FORCE: 2,
+            MAX_CHARGE: 100,
+            CHARGE_DECAY: 0.05,
+            PAPER_COUNT: 30,
+            RULER_HEIGHT_PCT: 40 // Ruler tip is roughly at 40% height relative to screen
+        };
+
+        // --- State Management ---
+        const state = {
+            charge: 0,
+            papers: [],
+            rulerX: 50, // 0-100 percentage
+            isRubbing: false,
+            rubTimeout: null,
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+
+        // --- DOM Elements ---
+        const dom = {
+            experimentArea: document.getElementById('experiment-area'),
+            ruler: document.getElementById('ruler'),
+            cloth: document.getElementById('cloth'),
+            sparks: document.getElementById('sparks'),
+            papersLayer: document.getElementById('papers-layer'),
+            meterFill: document.getElementById('meter-fill'),
+            chargeText: document.getElementById('charge-text'),
+            chargeDesc: document.getElementById('charge-desc'),
+            btnRub: document.getElementById('btn-rub'),
+            iconRefresh: document.getElementById('icon-refresh'),
+            modal: document.getElementById('modal-overlay'),
+            btnReset: document.getElementById('btn-reset'),
+            btnWhy: document.getElementById('btn-why'),
+            btnCloseModal: document.getElementById('btn-close-modal'),
+            btnStart: document.getElementById('btn-start'),
+            rulerMarkings: document.querySelector('.ruler-markings')
+        };
+
+        // --- Initialization ---
+        function init() {
+            // Generate ruler markings
+            for(let i=0; i<10; i++) {
+                const mark = document.createElement('div');
+                mark.className = 'mark';
+                dom.rulerMarkings.appendChild(mark);
+            }
+
+            // Check Guest Mode / LocalStorage
+            const hasVisited = localStorage.getItem('staticLab_hasSeenIntro');
+            if (!hasVisited) {
+                openModal();
+                localStorage.setItem('staticLab_hasSeenIntro', 'true');
+            }
+
+            // Event Listeners
+            window.addEventListener('resize', handleResize);
+            dom.experimentArea.addEventListener('mousemove', handleInput);
+            dom.experimentArea.addEventListener('touchmove', handleInput, { passive: false });
+            
+            dom.btnRub.addEventListener('click', rubRuler);
+            dom.btnReset.addEventListener('click', resetExperiment);
+            
+            dom.btnWhy.addEventListener('click', openModal);
+            dom.btnCloseModal.addEventListener('click', closeModal);
+            dom.btnStart.addEventListener('click', closeModal);
+
+            resetExperiment();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- Core Logic ---
+
+        function createPapers() {
+            dom.papersLayer.innerHTML = '';
+            state.papers = [];
+            
+            for (let i = 0; i < CONSTANTS.PAPER_COUNT; i++) {
+                const paper = {
+                    id: i,
+                    x: 10 + Math.random() * 80, // %
+                    y: 90 + Math.random() * 5,  // %
+                    rotation: Math.random() * 360,
+                    isStuck: false,
+                    offsetX: 0,
+                    offsetY: 0,
+                    // DOM Element reference for performance
+                    el: document.createElement('div')
+                };
+
+                paper.el.className = 'paper';
+                // Random slightly different whites
+                paper.el.style.backgroundColor = Math.random() > 0.5 ? '#f8fafc' : '#e2e8f0';
+                
+                dom.papersLayer.appendChild(paper.el);
+                state.papers.push(paper);
+                updatePaperVisual(paper);
+            }
+        }
+
+        function resetExperiment() {
+            state.charge = 0;
+            state.isRubbing = false;
+            updateMeter();
+            createPapers();
+        }
+
+        function handleInput(e) {
+            e.preventDefault(); // Prevent scroll on touch
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            
+            // Calculate percentage based on container width
+            const rect = dom.experimentArea.getBoundingClientRect();
+            const relativeX = clientX - rect.left;
+            let percentage = (relativeX / rect.width) * 100;
+            
+            // Clamp
+            percentage = Math.max(5, Math.min(95, percentage));
+            state.rulerX = percentage;
+            
+            updateRulerVisual();
+        }
+
+        function handleResize() {
+            state.width = window.innerWidth;
+            state.height = window.innerHeight;
+        }
+
+        function rubRuler() {
+            if (state.isRubbing) return;
+            
+            state.isRubbing = true;
+            state.charge = Math.min(state.charge + 25, CONSTANTS.MAX_CHARGE);
+            
+            // UI Updates
+            dom.cloth.classList.add('active');
+            dom.iconRefresh.classList.add('spin');
+            
+            if (state.rubTimeout) clearTimeout(state.rubTimeout);
+            
+            state.rubTimeout = setTimeout(() => {
+                state.isRubbing = false;
+                dom.cloth.classList.remove('active');
+                dom.iconRefresh.classList.remove('spin');
+            }, 600);
+        }
+
+        // --- Physics Engine ---
+
+        function gameLoop() {
+            // Decay charge
+            if (state.charge > 0) {
+                state.charge = Math.max(0, state.charge - CONSTANTS.CHARGE_DECAY);
+            }
+            updateMeter();
+            updateRulerVisual(); // Update sparks opacity etc
+
+            // Update papers
+            state.papers.forEach(paper => {
+                // Logic
+                if (paper.isStuck) {
+                    if (state.charge < 10) {
+                        paper.isStuck = false; // Fall
+                    } else {
+                        // Follow ruler
+                        paper.x = state.rulerX + (paper.offsetX / state.width * 100);
+                        paper.y = 20 + (paper.offsetY / state.height * 100);
+                    }
+                }
+
+                if (!paper.isStuck) {
+                    let newY = paper.y;
+                    let newIsStuck = false;
+
+                    const distX = Math.abs(paper.x - state.rulerX);
+                    const distY = Math.abs(paper.y - 40); // Ruler tip approx area
+
+                    // Attraction
+                    if (state.charge > 20 && distX < 15 && distY < 60) {
+                        const lift = (state.charge / 100) * CONSTANTS.ATTRACTION_FORCE;
+                        newY -= lift;
+                        paper.x += (Math.random() - 0.5) * 0.5; // Jitter
+
+                        // Collision with ruler bottom
+                        if (newY <= 45 && distX < 5) {
+                            newIsStuck = true;
+                        }
+                    } else if (newY < 90) {
+                        newY += CONSTANTS.GRAVITY; // Gravity
+                    }
+
+                    // Floor
+                    if (newY > 95) newY = 95;
+
+                    // Update State
+                    paper.y = newY;
+                    
+                    if (newIsStuck && !paper.isStuck) {
+                        // Just got stuck, save offset
+                        paper.isStuck = true;
+                        paper.offsetX = (paper.x - state.rulerX) * (state.width / 100);
+                        paper.offsetY = (paper.y - 20) * (state.height / 100);
+                    }
+                }
+                
+                updatePaperVisual(paper);
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- Visual Updaters ---
+
+        function updateRulerVisual() {
+            // Position & Rotation
+            dom.ruler.style.left = `${state.rulerX}%`;
+            dom.ruler.style.transform = `translateX(-50%) rotate(${(state.rulerX - 50) / 5}deg)`;
+            
+            // Glow effect
+            const glowSpread = state.charge / 5;
+            const glowOpacity = state.charge / 150;
+            dom.ruler.style.boxShadow = `0 0 ${state.charge/2}px ${glowSpread}px rgba(255, 255, 0, ${glowOpacity})`;
+
+            // Sparks
+            dom.sparks.style.opacity = state.charge > 20 ? (state.charge / 100) : 0;
+        }
+
+        function updatePaperVisual(paper) {
+            paper.el.style.left = `${paper.x}%`;
+            paper.el.style.top = `${paper.y}%`;
+            paper.el.style.transform = `rotate(${paper.rotation}deg)`;
+        }
+
+        function updateMeter() {
+            // Bar
+            dom.meterFill.style.width = `${state.charge}%`;
+            
+            // Color
+            if (state.charge > 80) {
+                dom.meterFill.style.backgroundColor = '#ef4444'; // red
+                dom.chargeDesc.textContent = "High Voltage!";
+            } else if (state.charge > 40) {
+                dom.meterFill.style.backgroundColor = '#facc15'; // yellow
+                dom.chargeDesc.textContent = "Positively Charged (+)";
+            } else {
+                dom.meterFill.style.backgroundColor = '#60a5fa'; // blue
+                dom.chargeDesc.textContent = state.charge < 20 ? "Neutral" : "Low Charge";
+            }
+
+            // Text
+            dom.chargeText.textContent = `${Math.round(state.charge)}%`;
+            dom.chargeText.className = state.charge > 50 ? 'text-green-500' : 'text-slate-400';
+        }
+
+        function openModal() {
+            dom.modal.classList.add('open');
+        }
+
+        function closeModal() {
+            dom.modal.classList.remove('open');
+        }
+
+        // --- Start ---
+        // Wait for DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
