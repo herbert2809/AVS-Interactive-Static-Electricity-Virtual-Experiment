@@ -18,7 +18,8 @@
             background-color: #f8fafc; /* slate-50 */
             color: #1e293b; /* slate-800 */
             height: 100vh;
-            overflow: hidden;
+            width: 100vw;
+            overflow: hidden; /* Prevent global scroll */
             display: flex;
             flex-direction: column;
             user-select: none;
@@ -31,10 +32,11 @@
             color: white;
             padding: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+            z-index: 50;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0; /* Prevent header from shrinking */
         }
 
         .header-left {
@@ -60,7 +62,8 @@
             background: linear-gradient(to bottom, #eff6ff, #e2e8f0); /* blue-50 to slate-200 */
             cursor: crosshair;
             overflow: hidden;
-            touch-action: none; /* Prevent scroll on mobile */
+            touch-action: none; /* Critical for mobile drag */
+            z-index: 10;
         }
 
         /* --- Ruler --- */
@@ -85,6 +88,8 @@
             padding-bottom: 1rem;
             left: 50%;
             pointer-events: none; /* Let clicks pass through to container */
+            z-index: 30; /* Above papers */
+            will-change: transform, left, box-shadow;
         }
 
         .ruler-markings {
@@ -114,12 +119,13 @@
             border-radius: 9999px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             border: 4px solid #fde047; /* yellow-200 */
-            z-index: 20;
+            z-index: 40; /* Above ruler */
             left: 50%;
             top: 10%;
             /* transform handled in JS/Keyframes */
             display: none; /* Hidden by default */
             overflow: hidden;
+            pointer-events: none;
         }
 
         #cloth.active {
@@ -150,6 +156,7 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.2s;
+            pointer-events: none;
         }
 
         .spark-icon {
@@ -157,23 +164,31 @@
             font-size: 1.5rem;
             font-weight: bold;
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            text-shadow: 0 0 10px #facc15;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.2); }
         }
 
         /* --- Paper Bits --- */
+        #papers-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+        }
+
         .paper {
             position: absolute;
             width: 1rem;
             height: 1rem;
             background-color: white;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
             transition: transform 0.075s linear; /* Smooth rotation */
             clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-            opacity: 0.9;
+            opacity: 0.95;
             will-change: top, left, transform;
         }
 
@@ -182,11 +197,13 @@
             background-color: white;
             padding: 1rem;
             box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 20;
+            z-index: 60;
+            flex-shrink: 0;
+            position: relative;
         }
 
         .control-container {
-            max-width: 42rem;
+            max-width: 50rem;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -197,6 +214,7 @@
             .control-container {
                 flex-direction: row;
                 align-items: center;
+                gap: 2rem;
             }
         }
 
@@ -214,15 +232,17 @@
             padding: 1rem 1.5rem;
             border-radius: 0.75rem;
             border: none;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             cursor: pointer;
             transition: all 0.1s;
             position: relative;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-wipe:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
         }
 
         .btn-wipe:hover {
@@ -258,10 +278,11 @@
         .meter-bar-bg {
             width: 100%;
             height: 1rem;
-            background-color: #e2e8f0;
+            background-color: #f1f5f9;
             border-radius: 9999px;
             overflow: hidden;
             border: 1px solid #cbd5e1;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
         }
 
         #meter-fill {
@@ -269,6 +290,7 @@
             width: 0%;
             background-color: #60a5fa; /* blue-400 */
             transition: width 0.2s ease-out, background-color 0.2s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         .meter-text {
@@ -281,11 +303,11 @@
         .btn-reset {
             padding: 0.75rem;
             color: #94a3b8;
-            background: transparent;
-            border: none;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
             cursor: pointer;
-            border-radius: 9999px;
-            transition: color 0.2s, background-color 0.2s;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -294,6 +316,7 @@
         .btn-reset:hover {
             color: #ef4444;
             background-color: #fef2f2;
+            border-color: #fecaca;
         }
 
         /* --- Modal --- */
@@ -301,7 +324,7 @@
             position: fixed;
             inset: 0;
             background-color: rgba(0, 0, 0, 0.6);
-            z-index: 50;
+            z-index: 100;
             display: none; /* Hidden by default */
             align-items: center;
             justify-content: center;
@@ -323,11 +346,13 @@
             overflow: hidden;
             transform: scale(0.95);
             animation: zoomIn 0.2s ease-out forwards;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
             background-color: #2563eb;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -346,24 +371,29 @@
             background-color: #fffbeb;
             padding: 1rem;
             border-radius: 0.5rem;
-            border: 1px solid #fef3c7;
+            border: 1px solid #fcd34d;
         }
 
         .btn-primary {
             background-color: #2563eb;
             color: white;
-            padding: 0.6rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
             border: none;
             cursor: pointer;
             box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
             transition: transform 0.1s, background-color 0.1s;
+            font-size: 1rem;
         }
 
         .btn-primary:hover {
             background-color: #1d4ed8;
-            transform: scale(1.02);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .guest-badge {
@@ -374,11 +404,11 @@
                 display: flex;
                 align-items: center;
                 padding: 0.25rem 0.75rem;
-                background-color: rgba(29, 78, 216, 0.5);
+                background-color: rgba(255, 255, 255, 0.15);
                 border-radius: 9999px;
                 font-size: 0.75rem;
                 color: #dbeafe;
-                border: 1px solid rgba(59, 130, 246, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.2);
             }
         }
 
@@ -386,10 +416,10 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            background-color: white;
+            background-color: rgba(255,255,255,0.9);
             color: #1d4ed8;
             padding: 0.375rem 0.75rem;
-            border-radius: 9999px;
+            border-radius: 0.5rem;
             font-size: 0.875rem;
             font-weight: 600;
             border: none;
@@ -397,7 +427,7 @@
             transition: background-color 0.2s;
         }
         .btn-small:hover {
-            background-color: #eff6ff;
+            background-color: white;
         }
 
         /* --- Utility Classes --- */
@@ -407,6 +437,7 @@
         .text-sm { font-size: 0.875rem; }
         .text-xs { font-size: 0.75rem; }
         .text-slate-400 { color: #94a3b8; }
+        .text-green-500 { color: #22c55e; font-weight: bold; }
 
         /* --- Animations --- */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -425,7 +456,7 @@
             fill: none;
         }
         .icon-lg { width: 1.5rem; height: 1.5rem; }
-        .icon-yellow { color: #fde047; }
+        .icon-yellow { color: #fde047; fill: currentColor; stroke: none; }
     </style>
 </head>
 <body>
@@ -434,11 +465,11 @@
     <header>
         <div class="header-left">
             <svg class="icon-yellow icon-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            <h1>Static Electricity Lab</h1>
+            <h1>Static Lab</h1>
         </div>
         <div class="header-right">
-            <div class="guest-badge">Guest Access Active</div>
-            <button class="btn-small" id="btn-why">
+            <div class="guest-badge">Student Mode</div>
+            <button class="btn-small" id="btn-why" aria-label="Explanation">
                 <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                 Why?
             </button>
@@ -447,7 +478,7 @@
 
     <!-- Main Experiment Area -->
     <main id="experiment-area">
-        <div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); color: #94a3b8; font-size: 0.875rem; pointer-events: none;">
+        <div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); color: #64748b; font-size: 0.875rem; pointer-events: none; background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 99px;">
             Move mouse/finger to control ruler
         </div>
 
@@ -482,9 +513,9 @@
                     <div class="icon-circle">
                         <svg id="icon-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
                     </div>
-                    <span style="font-size: 1.125rem; letter-spacing: 0.025em; text-transform: uppercase;">Wipe Cloth</span>
+                    <span style="font-size: 1.125rem; letter-spacing: 0.025em; text-transform: uppercase;">Rub Ruler</span>
                 </button>
-                <p class="text-center text-xs text-slate-400 mt-2">Click/Tap to build up static charge</p>
+                <p class="text-center text-xs text-slate-400 mt-2">Click repeatedly to build charge</p>
             </div>
 
             <!-- Meter -->
@@ -501,7 +532,7 @@
 
             <!-- Reset -->
             <div>
-                <button id="btn-reset" class="btn-reset" title="Reset Experiment">
+                <button id="btn-reset" class="btn-reset" title="Reset Experiment" aria-label="Reset Experiment">
                     <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
                 </button>
             </div>
@@ -522,21 +553,21 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <h3 style="color: #2563eb; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Experiment</h3>
+                    <h3 style="color: #2563eb; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Experiment Steps</h3>
                     <p style="font-size: 0.875rem; line-height: 1.6;">
-                        1. Click <strong>"Wipe Cloth"</strong> repeatedly to charge the ruler.<br/>
+                        1. Click <strong>"Rub Ruler"</strong> repeatedly to charge it.<br/>
                         2. Move the ruler over the paper bits.<br/>
-                        3. Watch them jump!
+                        3. Watch them jump up!
                     </p>
                 </div>
                 
                 <div class="info-box">
-                    <h3 style="color: #b45309; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Science</h3>
+                    <h3 style="color: #b45309; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">The Science</h3>
                     <p style="font-size: 0.875rem; line-height: 1.6;">
                         <strong>Friction</strong> transfers electrons between the cloth and the ruler, creating an <span style="color: #d97706; font-weight: 700;">electric charge</span>.
                     </p>
                     <p style="font-size: 0.875rem; margin-top: 0.5rem;">
-                        This charge creates an invisible field that attracts neutral objects like paper. If the force is stronger than gravity, the paper lifts up!
+                        This charge creates an invisible field that attracts neutral objects like paper. If the electrostatic force is stronger than gravity, the paper lifts up!
                     </p>
                 </div>
 
@@ -548,14 +579,24 @@
     </div>
 
     <script>
+        // --- Safe Storage Wrapper (Prevents crashes in iframes) ---
+        const safeStorage = {
+            getItem: (key) => {
+                try { return localStorage.getItem(key); } catch(e) { return null; }
+            },
+            setItem: (key, val) => {
+                try { localStorage.setItem(key, val); } catch(e) {}
+            }
+        };
+
         // --- Configuration & Constants ---
         const CONSTANTS = {
             GRAVITY: 0.5,
-            ATTRACTION_FORCE: 2,
+            ATTRACTION_FORCE: 2.5, // Slightly increased for better effect
             MAX_CHARGE: 100,
             CHARGE_DECAY: 0.05,
-            PAPER_COUNT: 30,
-            RULER_HEIGHT_PCT: 40 // Ruler tip is roughly at 40% height relative to screen
+            PAPER_COUNT: 35,
+            RULER_TIP_OFFSET_Y: 45 // approx % height where tip is
         };
 
         // --- State Management ---
@@ -599,15 +640,17 @@
             }
 
             // Check Guest Mode / LocalStorage
-            const hasVisited = localStorage.getItem('staticLab_hasSeenIntro');
+            const hasVisited = safeStorage.getItem('staticLab_hasSeenIntro');
             if (!hasVisited) {
                 openModal();
-                localStorage.setItem('staticLab_hasSeenIntro', 'true');
+                safeStorage.setItem('staticLab_hasSeenIntro', 'true');
             }
 
             // Event Listeners
             window.addEventListener('resize', handleResize);
             dom.experimentArea.addEventListener('mousemove', handleInput);
+            
+            // Critical: Passive false allows us to preventDefault() and stop scrolling
             dom.experimentArea.addEventListener('touchmove', handleInput, { passive: false });
             
             dom.btnRub.addEventListener('click', rubRuler);
@@ -631,12 +674,12 @@
                 const paper = {
                     id: i,
                     x: 10 + Math.random() * 80, // %
-                    y: 90 + Math.random() * 5,  // %
+                    y: 90 + Math.random() * 8,  // % (Scattered on floor)
                     rotation: Math.random() * 360,
                     isStuck: false,
                     offsetX: 0,
                     offsetY: 0,
-                    // DOM Element reference for performance
+                    weight: 0.8 + Math.random() * 0.4, // Varies how easy they fly
                     el: document.createElement('div')
                 };
 
@@ -658,15 +701,21 @@
         }
 
         function handleInput(e) {
-            e.preventDefault(); // Prevent scroll on touch
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            e.preventDefault(); // Prevent scroll on touch devices while interacting
+            
+            let clientX;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+            } else {
+                clientX = e.clientX;
+            }
             
             // Calculate percentage based on container width
             const rect = dom.experimentArea.getBoundingClientRect();
             const relativeX = clientX - rect.left;
             let percentage = (relativeX / rect.width) * 100;
             
-            // Clamp
+            // Clamp ruler movement
             percentage = Math.max(5, Math.min(95, percentage));
             state.rulerX = percentage;
             
@@ -682,7 +731,7 @@
             if (state.isRubbing) return;
             
             state.isRubbing = true;
-            state.charge = Math.min(state.charge + 25, CONSTANTS.MAX_CHARGE);
+            state.charge = Math.min(state.charge + 20, CONSTANTS.MAX_CHARGE);
             
             // UI Updates
             dom.cloth.classList.add('active');
@@ -700,7 +749,7 @@
         // --- Physics Engine ---
 
         function gameLoop() {
-            // Decay charge
+            // Decay charge slowly
             if (state.charge > 0) {
                 state.charge = Math.max(0, state.charge - CONSTANTS.CHARGE_DECAY);
             }
@@ -709,14 +758,13 @@
 
             // Update papers
             state.papers.forEach(paper => {
-                // Logic
                 if (paper.isStuck) {
                     if (state.charge < 10) {
-                        paper.isStuck = false; // Fall
+                        paper.isStuck = false; // Fall if charge too low
                     } else {
-                        // Follow ruler
+                        // Stuck to ruler: Follow ruler position exactly
                         paper.x = state.rulerX + (paper.offsetX / state.width * 100);
-                        paper.y = 20 + (paper.offsetY / state.height * 100);
+                        paper.y = 35 + (paper.offsetY / state.height * 100);
                     }
                 }
 
@@ -725,33 +773,44 @@
                     let newIsStuck = false;
 
                     const distX = Math.abs(paper.x - state.rulerX);
-                    const distY = Math.abs(paper.y - 40); // Ruler tip approx area
+                    // distY measures distance from ruler tip area
+                    const distY = Math.abs(paper.y - CONSTANTS.RULER_TIP_OFFSET_Y); 
 
-                    // Attraction
-                    if (state.charge > 20 && distX < 15 && distY < 60) {
-                        const lift = (state.charge / 100) * CONSTANTS.ATTRACTION_FORCE;
+                    // Attraction Logic
+                    // Needs reasonable charge, close X proximity, and reasonable Y proximity
+                    if (state.charge > 15 && distX < 12 && distY < 55) {
+                        // Calculate lift force based on charge and distance
+                        const distanceFactor = Math.max(0.1, distY / 50);
+                        const lift = ((state.charge / 100) * CONSTANTS.ATTRACTION_FORCE) / (distanceFactor * paper.weight);
+                        
                         newY -= lift;
-                        paper.x += (Math.random() - 0.5) * 0.5; // Jitter
+                        
+                        // Horizontal attraction (pull towards center of ruler)
+                        if (paper.x < state.rulerX) paper.x += 0.2;
+                        if (paper.x > state.rulerX) paper.x -= 0.2;
+                        
+                        paper.x += (Math.random() - 0.5) * 0.5; // Jitter/Flutter
 
-                        // Collision with ruler bottom
-                        if (newY <= 45 && distX < 5) {
+                        // Collision/Sticking Check
+                        // If it hits the bottom area of the ruler
+                        if (newY <= (CONSTANTS.RULER_TIP_OFFSET_Y + 5) && distX < 6) {
                             newIsStuck = true;
                         }
-                    } else if (newY < 90) {
-                        newY += CONSTANTS.GRAVITY; // Gravity
+                    } else if (newY < 95) {
+                        newY += CONSTANTS.GRAVITY * paper.weight; // Gravity falls
                     }
 
-                    // Floor
+                    // Floor collision
                     if (newY > 95) newY = 95;
 
                     // Update State
                     paper.y = newY;
                     
                     if (newIsStuck && !paper.isStuck) {
-                        // Just got stuck, save offset
+                        // Just got stuck, save offset relative to ruler center
                         paper.isStuck = true;
                         paper.offsetX = (paper.x - state.rulerX) * (state.width / 100);
-                        paper.offsetY = (paper.y - 20) * (state.height / 100);
+                        paper.offsetY = (paper.y - 35) * (state.height / 100);
                     }
                 }
                 
@@ -766,15 +825,16 @@
         function updateRulerVisual() {
             // Position & Rotation
             dom.ruler.style.left = `${state.rulerX}%`;
-            dom.ruler.style.transform = `translateX(-50%) rotate(${(state.rulerX - 50) / 5}deg)`;
+            // Subtle rotation based on movement
+            dom.ruler.style.transform = `translateX(-50%) rotate(${(state.rulerX - 50) / 4}deg)`;
             
             // Glow effect
-            const glowSpread = state.charge / 5;
-            const glowOpacity = state.charge / 150;
-            dom.ruler.style.boxShadow = `0 0 ${state.charge/2}px ${glowSpread}px rgba(255, 255, 0, ${glowOpacity})`;
+            const glowSpread = state.charge / 4;
+            const glowOpacity = state.charge / 120;
+            dom.ruler.style.boxShadow = `0 0 ${state.charge/2}px ${glowSpread}px rgba(250, 204, 21, ${glowOpacity})`;
 
-            // Sparks
-            dom.sparks.style.opacity = state.charge > 20 ? (state.charge / 100) : 0;
+            // Sparks visibility
+            dom.sparks.style.opacity = state.charge > 25 ? (state.charge / 100) : 0;
         }
 
         function updatePaperVisual(paper) {
@@ -784,19 +844,22 @@
         }
 
         function updateMeter() {
-            // Bar
+            // Bar Width
             dom.meterFill.style.width = `${state.charge}%`;
             
-            // Color
-            if (state.charge > 80) {
+            // Color Logic
+            if (state.charge > 75) {
                 dom.meterFill.style.backgroundColor = '#ef4444'; // red
-                dom.chargeDesc.textContent = "High Voltage!";
-            } else if (state.charge > 40) {
+                dom.chargeDesc.textContent = "High Static Charge!";
+                dom.chargeDesc.style.color = '#ef4444';
+            } else if (state.charge > 30) {
                 dom.meterFill.style.backgroundColor = '#facc15'; // yellow
                 dom.chargeDesc.textContent = "Positively Charged (+)";
+                dom.chargeDesc.style.color = '#b45309';
             } else {
                 dom.meterFill.style.backgroundColor = '#60a5fa'; // blue
-                dom.chargeDesc.textContent = state.charge < 20 ? "Neutral" : "Low Charge";
+                dom.chargeDesc.textContent = state.charge < 10 ? "Neutral" : "Low Charge";
+                dom.chargeDesc.style.color = '#64748b';
             }
 
             // Text
@@ -813,7 +876,6 @@
         }
 
         // --- Start ---
-        // Wait for DOM
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
